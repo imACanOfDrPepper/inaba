@@ -1,5 +1,5 @@
 use amane::{
-    Align, App, Battery, Center, Color, Column, End, Full, Horizontal, Layer, LayerWindow, Margin, Monitor, Padding, Parent, Rectangle, Row, Service, Shadow, Start, Text, Vertical, Zone, children
+    Align, App, Audio, Battery, Button, Center, Color, Column, End, Full, Horizontal, Layer, LayerWindow, Margin, Monitor, Padding, Parent, Rectangle, Row, Scroll, Service, Shadow, Start, Text, Vertical, Widget, Zone, children
 };
 
 fn main() {
@@ -45,6 +45,14 @@ fn bar(monitor: &Monitor) -> LayerWindow {
 
     let battery_string = battery_string();
 
+    let audio = Audio::read();
+
+    let audio_string = if audio.muted() {
+        String::from("   0%")
+    } else {
+        format!("  {}%", audio.volume())
+    };
+
     LayerWindow::new()
         .width(Full)
         .height(rem * 0.04)
@@ -71,15 +79,38 @@ fn bar(monitor: &Monitor) -> LayerWindow {
                 .fill(Color::rgb(119, 119, 119))
                 .shadow(Shadow::inner("#000000").opacity(0.15).blur(8.0))
                 .child(Row::new(children![
-                    section(Text::new(format!("Workspaces"))
-                        .size(rem * 0.02)
-                        .color(Color::rgb(221, 221, 221)), Start),
-                    section(Text::new(format!("Time"))
-                        .size(rem * 0.02)
-                        .color(Color::rgb(221, 221, 221)), Center),
-                    section(Text::new(battery_string)
-                        .size(rem * 0.02)
-                        .color(Color::rgb(221, 221, 221)), End)
+                    section(
+                        Text::new(format!("Workspaces"))
+                            .size(rem * 0.02)
+                            .color(Color::rgb(221, 221, 221)),
+                        Start
+                    ),
+                    section(
+                        Text::new(format!("Time"))
+                            .size(rem * 0.02)
+                            .color(Color::rgb(221, 221, 221)),
+                        Center
+                    ),
+                    section(
+                        Row::new(children![
+                            Rectangle::new()
+                                .width(Parent)
+                                .height(Parent)
+                                .on_click(clicked_audio)
+                                .on_scroll(scrolled_audio)
+                                .align_child(End, Center)
+                                .child(
+                                    Text::new(audio_string)
+                                        .size(rem * 0.02)
+                                        .color(Color::rgb(221, 221, 221))
+                                ),
+                            Text::new(battery_string)
+                                .size(rem * 0.02)
+                                .color(Color::rgb(221, 221, 221))
+                        ])
+                        .gap(12.),
+                        End
+                    )
                 ])),
         )
 }
@@ -90,29 +121,53 @@ fn battery_string() -> String {
         let is_charging = Battery::read().charging();
 
         let battery_icon = if is_charging {
-            if battery < 5 {"󰢟"}
-            else if battery < 10 {"󰢜"}
-            else if battery < 20 {"󰂆"}
-            else if battery < 30 {"󰂇"}
-            else if battery < 40 {"󰂈"}
-            else if battery < 50 {"󰢝"}
-            else if battery < 60 {"󰂉"}
-            else if battery < 70 {"󰢞"}
-            else if battery < 80 {"󰂊"}
-            else if battery < 90 {"󰂋"}
-            else {"󰂅"}
+            if battery < 5 {
+                "󰢟"
+            } else if battery < 10 {
+                "󰢜"
+            } else if battery < 20 {
+                "󰂆"
+            } else if battery < 30 {
+                "󰂇"
+            } else if battery < 40 {
+                "󰂈"
+            } else if battery < 50 {
+                "󰢝"
+            } else if battery < 60 {
+                "󰂉"
+            } else if battery < 70 {
+                "󰢞"
+            } else if battery < 80 {
+                "󰂊"
+            } else if battery < 90 {
+                "󰂋"
+            } else {
+                "󰂅"
+            }
         } else {
-            if battery < 5 {"󱃍"}
-            else if battery < 10 {"󰁺"}
-            else if battery < 20 {"󰁻"}
-            else if battery < 30 {"󰁼"}
-            else if battery < 40 {"󰁽"}
-            else if battery < 50 {"󰁾"}
-            else if battery < 60 {"󰁿"}
-            else if battery < 70 {"󰂀"}
-            else if battery < 80 {"󰂁"}
-            else if battery < 90 {"󰂂"}
-            else {"󰁹"}
+            if battery < 5 {
+                "󱃍"
+            } else if battery < 10 {
+                "󰁺"
+            } else if battery < 20 {
+                "󰁻"
+            } else if battery < 30 {
+                "󰁼"
+            } else if battery < 40 {
+                "󰁽"
+            } else if battery < 50 {
+                "󰁾"
+            } else if battery < 60 {
+                "󰁿"
+            } else if battery < 70 {
+                "󰂀"
+            } else if battery < 80 {
+                "󰂁"
+            } else if battery < 90 {
+                "󰂂"
+            } else {
+                "󰁹"
+            }
         };
 
         format!("{battery_icon}  {battery}%")
@@ -121,10 +176,24 @@ fn battery_string() -> String {
     }
 }
 
-fn section(content: Text, align: impl Into<Align>) -> Rectangle {
+fn section(content: impl Widget + 'static, align: impl Into<Align>) -> Rectangle {
     Rectangle::new()
         .width(Parent)
         .height(Parent)
         .align_child(align, Center)
         .child(content)
+}
+
+fn clicked_audio(_: Button) {
+    Audio::toggle_mute();
+}
+
+fn scrolled_audio(scroll: Scroll) {
+    let volume = i32::from(Audio::read().volume());
+
+    let step: i32 = (scroll.y * 10.).round() as i32;
+
+    let changed = (volume + step).clamp(0, 100);
+
+    Audio::set_volume(changed as u8);
 }
