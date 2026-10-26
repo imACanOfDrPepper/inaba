@@ -47,7 +47,7 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
                     bottom: padding_v,
                     left: padding_h,
                 })
-                .fill(Color::rgb(119, 119, 119))
+                .fill(Color::rgb(51, 51, 51))
                 .shadow(Shadow::inner("#000000").opacity(0.15).blur(8.0))
                 .child(Row::new(children![
                     section(
@@ -70,11 +70,7 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
                                 .on_click(clicked_audio)
                                 .on_scroll(scrolled_audio)
                                 .align_child(End, Center)
-                                .child(
-                                    Text::new(audio_string)
-                                        .size(rem * 0.02)
-                                        .color(audio_color)
-                                ),
+                                .child(Text::new(audio_string).size(rem * 0.02).color(audio_color)),
                             Text::new(battery_string)
                                 .size(rem * 0.02)
                                 .color(Color::rgb(221, 221, 221))
@@ -141,7 +137,7 @@ fn battery_string() -> String {
             }
         };
 
-        format!("{battery_icon}  {battery}%")
+        format!("{battery_icon} {battery}%")
     } else {
         "".to_string()
     }
