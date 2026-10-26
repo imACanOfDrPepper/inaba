@@ -22,6 +22,8 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
         format!("  {}%", audio.volume())
     };
 
+    let audio_color = audio_color();
+
     LayerWindow::new()
         .width(Full)
         .height(rem * 0.04)
@@ -71,7 +73,7 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
                                 .child(
                                     Text::new(audio_string)
                                         .size(rem * 0.02)
-                                        .color(Color::rgb(221, 221, 221))
+                                        .color(audio_color)
                                 ),
                             Text::new(battery_string)
                                 .size(rem * 0.02)
@@ -141,7 +143,7 @@ fn battery_string() -> String {
 
         format!("{battery_icon}  {battery}%")
     } else {
-        "No battery found".to_string()
+        "".to_string()
     }
 }
 
@@ -160,9 +162,17 @@ fn clicked_audio(_: Button) {
 fn scrolled_audio(scroll: Scroll) {
     let volume = i32::from(Audio::read().volume());
 
-    let step: i32 = (scroll.y * 10.).round() as i32;
+    let step: i32 = (scroll.y * 5.).round() as i32;
 
     let changed = (volume + step).clamp(0, 100);
 
     Audio::set_volume(changed as u8);
+}
+
+fn audio_color() -> Color {
+    if Audio::read().muted() {
+        Color::rgb(255, 153, 153)
+    } else {
+        Color::rgb(221, 221, 221)
+    }
 }
