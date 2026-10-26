@@ -1,5 +1,5 @@
 use amane::{
-    Color, Column, Horizontal, Layer, LayerWindow, Margin, Monitor, Notification, Notifications, Rectangle, Service, Size::Parent, Text, Urgency, Vertical, Widget
+    Align, Color, Column, Horizontal, Layer, LayerWindow, Margin, Monitor, Notification, Notifications, Rectangle, Service, Size::Parent, Text, Urgency, Vertical, Widget, children
 };
 
 pub fn notifs(monitor: &Monitor) -> LayerWindow {
@@ -38,20 +38,29 @@ fn card(notif: &Notification) -> Rectangle {
 
     let id = notif.id();
 
-    let notif_body = if !notif.body().is_empty() {
-        format!(": {}", notif.body())
-    } else {
-        "".to_string()
-    };
-
-    let label = format!("{}{}", notif.summary(), notif_body);
-
     Rectangle::new()
         .width(Parent)
         .height(60.)
         .radius(12.)
         .fill(fill)
-        .padding(12.)
+        .padding(10.)
         .on_click(move |_| Notifications::click(id))
-        .child(Text::new(label).elide().color(Color::rgb(221, 221, 221)))
+        .align_child(Align::Start, Align::Center)
+        .child(Column::new(children![
+            section(
+                Text::new(notif.summary())
+                    .elide()
+                    .color(Color::rgb(221, 221, 221))
+            ),
+            section(
+                Text::new(notif.body())
+                    .elide()
+                    .color(Color::rgb(221, 221, 221))
+                    .size(12.)
+            ),
+        ]))
+}
+
+fn section(widget: impl Widget + 'static) -> Rectangle {
+    Rectangle::new().width(Parent).height(Parent).child(widget)
 }
