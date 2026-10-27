@@ -1,7 +1,8 @@
 use std::time::Duration;
 
 use amane::{
-    Apps, Color, Column, Image, Keyboard, Layer, LayerWindow, Rectangle, Row, ScrollArea, Service, Size::Parent, Text, TextInput, Widget, children
+    Apps, Color, Column, Image, Keyboard, Layer, LayerWindow, Rectangle, Row, ScrollArea, Service,
+    Size::Parent, Text, TextInput, Widget, children,
 };
 
 pub fn app_launcher() -> LayerWindow {
@@ -31,7 +32,10 @@ pub fn app_launcher() -> LayerWindow {
             .width(300.)
             .height(32.)
             .cursor(amane::Cursor::Pointer)
-            .on_click(move |_| {toggle(&["".to_string()]); launched.launch();})
+            .on_click(move |_| {
+                toggle(&["".to_string()]);
+                launched.launch();
+            })
             .child(Row::new(children![
                 icon,
                 Text::new(app.name())
@@ -48,6 +52,9 @@ pub fn app_launcher() -> LayerWindow {
         .layer(Layer::Overlay)
         .visible(launcher.open)
         .keyboard(Keyboard::Exclusive)
+        .on_key(|_| {
+            AppLauncher::write().open = false;
+        })
         .child(
             Rectangle::new()
                 .width(Parent)
@@ -67,7 +74,9 @@ pub fn app_launcher() -> LayerWindow {
                                 .on_change(|txt| {
                                     AppSearch::write().query = txt;
                                 })
-                                .on_submit(|_| {AppLauncher::write().open = false;})
+                                .on_submit(|_| {
+                                    AppLauncher::write().open = false;
+                                })
                         ),
                     ScrollArea::new("apps", Column::new(rows)),
                 ])),
