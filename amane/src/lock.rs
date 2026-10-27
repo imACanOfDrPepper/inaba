@@ -1,4 +1,7 @@
-use amane::{Center, Color, Column, Image, LayerWindow, Lock, Monitor, Rectangle, Service, Size::Parent, Text, TextInput, children};
+use amane::{
+    Center, Color, Column, Image, LayerWindow, Lock, Monitor, Rectangle, Service, Size::Parent,
+    Text, TextInput, children,
+};
 
 pub fn lock_screen(_: &Monitor) -> LayerWindow {
     let lock = Lock::read();
@@ -21,7 +24,11 @@ pub fn lock_screen(_: &Monitor) -> LayerWindow {
         Rectangle::new()
             .width(Parent)
             .height(Parent)
-            .fill(Image::cover("/home/prohaker/Pictures/Wallpapers/xenia.png").thumbnail(64, 36).blurred(2))
+            .fill(
+                Image::cover("/home/prohaker/Pictures/Wallpapers/xenia.png")
+                    .thumbnail(64, 36)
+                    .blurred(2),
+            )
             .align_child(Center, Center)
             .child(
                 Column::new(children![

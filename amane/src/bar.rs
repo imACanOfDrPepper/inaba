@@ -220,11 +220,7 @@ fn workspace_button(workspace: &Workspace) -> Rectangle {
 
     let id = workspace.id();
 
-    let width = if workspace.focused() {
-        30.
-    } else {
-        20.
-    };
+    let width = if workspace.focused() { 30. } else { 20. };
 
     Rectangle::new()
         .width(width)
@@ -233,5 +229,9 @@ fn workspace_button(workspace: &Workspace) -> Rectangle {
         .radius(15.)
         .align_child(Center, Center)
         .on_click(move |_| Workspaces::focus(id))
-        .child(Text::new(workspace.index().to_string()).size(12.).color(Color::rgb(51, 51, 51)))
+        .child(
+            Text::new(workspace.index().to_string())
+                .size(12.)
+                .color(Color::rgb(51, 51, 51)),
+        )
 }

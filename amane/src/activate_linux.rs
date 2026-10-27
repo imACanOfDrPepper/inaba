@@ -1,4 +1,6 @@
-use amane::{Color, Column, Horizontal, Layer, LayerWindow, Margin, Monitor, Text, Vertical, children};
+use amane::{
+    Color, Column, Horizontal, Layer, LayerWindow, Margin, Monitor, Text, Vertical, children,
+};
 
 pub fn activate_linux(monitor: &Monitor) -> LayerWindow {
     let rem = monitor.width.min(monitor.height) as f32;

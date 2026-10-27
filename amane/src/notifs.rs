@@ -1,5 +1,6 @@
 use amane::{
-    Align, Color, Column, Horizontal, Layer, LayerWindow, Margin, Monitor, Notification, Notifications, Rectangle, Service, Size::Parent, Text, Urgency, Vertical, Widget, children
+    Align, Color, Column, Horizontal, Layer, LayerWindow, Margin, Monitor, Notification,
+    Notifications, Rectangle, Service, Size::Parent, Text, Urgency, Vertical, Widget, children,
 };
 
 pub fn notifs(monitor: &Monitor) -> LayerWindow {
@@ -63,4 +64,10 @@ fn card(notif: &Notification) -> Rectangle {
 
 fn section(widget: impl Widget + 'static) -> Rectangle {
     Rectangle::new().width(Parent).height(Parent).child(widget)
+}
+
+pub fn clear_notifs(_: &[String]) -> String {
+    Notifications::clear();
+
+    String::from("cleared")
 }
