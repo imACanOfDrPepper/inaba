@@ -1,9 +1,7 @@
 use std::time::Duration;
 
 use amane::{
-    Align, Audio, Battery, Button, Center, Color, End, Full, Layer, LayerWindow, Margin, Monitor,
-    Padding, Parent, Rectangle, Row, Scroll, Service, Shadow, Start, Text, Vertical, Widget, Zone,
-    children,
+    Align, Audio, Battery, Button, Center, Color, End, Full, Layer, LayerWindow, Margin, Monitor, Padding, Parent, Rectangle, Row, Scroll, Service, Shadow, Start, Text, Vertical, Widget, Workspace, Workspaces, Zone, children
 };
 
 pub fn bar(monitor: &Monitor) -> LayerWindow {
@@ -28,6 +26,14 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
 
     let time = &Clock::read().time;
     let date = &Clock::read().date;
+
+    let workspaces = Workspaces::read();
+
+    let mut workspace_buttons: Vec<Box<dyn Widget>> = Vec::new();
+
+    for workspace in workspaces.list() {
+        workspace_buttons.push(Box::new(workspace_button(workspace)));
+    }
 
     LayerWindow::new()
         .width(Full)
@@ -56,9 +62,7 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
                 .shadow(Shadow::inner("#000000").opacity(0.15).blur(8.0))
                 .child(Row::new(children![
                     section(
-                        Text::new(format!("Workspaces"))
-                            .size(rem * 0.02)
-                            .color(Color::rgb(221, 221, 221)),
+                        Row::new(workspace_buttons).gap(5.),
                         Start
                     ),
                     section(
@@ -204,4 +208,25 @@ impl Service for Clock {
 
         changed
     }
+}
+
+fn workspace_button(workspace: &Workspace) -> Rectangle {
+    let fill = if workspace.focused() {
+        "#dddddd"
+    } else if workspace.urgent() {
+        "#ff9999"
+    } else {
+        "#b2b2b2"
+    };
+
+    let id = workspace.id();
+
+    Rectangle::new()
+        .width(30.)
+        .height(20.)
+        .fill(fill)
+        .radius(15.)
+        .align_child(Center, Center)
+        .on_click(move |_| Workspaces::focus(id))
+        .child(Text::new(workspace.index().to_string()).color(Color::rgb(51, 51, 51)))
 }
