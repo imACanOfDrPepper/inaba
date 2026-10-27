@@ -1,7 +1,9 @@
 use std::time::Duration;
 
 use amane::{
-    Align, Audio, Battery, Button, Center, Color, End, Full, Layer, LayerWindow, Margin, Monitor, Padding, Parent, Rectangle, Row, Scroll, Service, Shadow, Start, Text, Vertical, Widget, Workspace, Workspaces, Zone, children
+    Align, Audio, Battery, Button, Center, Color, End, Full, Layer, LayerWindow, Margin, Monitor,
+    Padding, Parent, Rectangle, Row, Scroll, Service, Shadow, Start, Text, Vertical, Widget,
+    Workspace, Workspaces, Zone, children,
 };
 
 pub fn bar(monitor: &Monitor) -> LayerWindow {
@@ -61,10 +63,7 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
                 .fill(Color::rgb(51, 51, 51))
                 .shadow(Shadow::inner("#000000").opacity(0.15).blur(8.0))
                 .child(Row::new(children![
-                    section(
-                        Row::new(workspace_buttons).gap(5.),
-                        Start
-                    ),
+                    section(Row::new(workspace_buttons).gap(5.), Start),
                     section(
                         Text::new(format!("{} · {}", time, date))
                             .size(rem * 0.02)
@@ -221,12 +220,18 @@ fn workspace_button(workspace: &Workspace) -> Rectangle {
 
     let id = workspace.id();
 
+    let width = if workspace.focused() {
+        30.
+    } else {
+        20.
+    };
+
     Rectangle::new()
-        .width(30.)
+        .width(width)
         .height(20.)
         .fill(fill)
         .radius(15.)
         .align_child(Center, Center)
         .on_click(move |_| Workspaces::focus(id))
-        .child(Text::new(workspace.index().to_string()).color(Color::rgb(51, 51, 51)))
+        .child(Text::new(workspace.index().to_string()).size(12.).color(Color::rgb(51, 51, 51)))
 }

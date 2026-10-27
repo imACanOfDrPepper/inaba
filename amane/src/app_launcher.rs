@@ -33,7 +33,7 @@ pub fn app_launcher() -> LayerWindow {
             .height(32.)
             .cursor(amane::Cursor::Pointer)
             .on_click(move |_| {
-                toggle(&["".to_string()]);
+                toggle_launcher(&["".to_string()]);
                 launched.launch();
             })
             .child(Row::new(children![
@@ -113,7 +113,7 @@ impl Service for AppLauncher {
     }
 }
 
-pub fn toggle(_: &[String]) -> String {
+pub fn toggle_launcher(_: &[String]) -> String {
     let mut launcher = AppLauncher::write();
 
     launcher.open = !launcher.open;
