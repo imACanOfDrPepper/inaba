@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use amane::{
     Align, Audio, Battery, Button, Center, Color, End, Full, Layer, LayerWindow, Margin, Monitor,
     Padding, Parent, Rectangle, Row, Scroll, Service, Shadow, Start, Text, Vertical, Widget, Zone,
@@ -23,6 +25,9 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
     };
 
     let audio_color = audio_color();
+
+    let time = &Clock::read().time;
+    let date = &Clock::read().date;
 
     LayerWindow::new()
         .width(Full)
@@ -57,7 +62,7 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
                         Start
                     ),
                     section(
-                        Text::new(format!("Time"))
+                        Text::new(format!("{} · {}", time, date))
                             .size(rem * 0.02)
                             .color(Color::rgb(221, 221, 221)),
                         Center
@@ -170,5 +175,33 @@ fn audio_color() -> Color {
         Color::rgb(255, 153, 153)
     } else {
         Color::rgb(221, 221, 221)
+    }
+}
+
+struct Clock {
+    time: String,
+    date: String,
+}
+
+impl Service for Clock {
+    fn new() -> Self {
+        Self {
+            time: amane::output("date +%H:%M"),
+            date: amane::output("date +'%b %d, %a'"),
+        }
+    }
+
+    fn interval() -> Duration {
+        Duration::from_secs(1)
+    }
+
+    fn update(&mut self) -> bool {
+        let time = amane::output("date +%H:%M");
+
+        let changed = time != self.time;
+
+        self.time = time;
+
+        changed
     }
 }
