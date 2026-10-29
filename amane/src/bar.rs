@@ -34,7 +34,7 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
     let mut workspace_buttons: Vec<Box<dyn Widget>> = Vec::new();
 
     for workspace in workspaces.list() {
-        workspace_buttons.push(Box::new(workspace_button(workspace)));
+        workspace_buttons.push(Box::new(workspace_button(workspace, rem)));
     }
 
     LayerWindow::new()
@@ -53,7 +53,7 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
             Rectangle::new()
                 .width(Parent)
                 .height(Parent)
-                .radius(12.)
+                .radius(rem * 0.02)
                 .padding(Padding {
                     top: padding_v,
                     right: padding_h,
@@ -63,7 +63,7 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
                 .fill(Color::rgb(51, 51, 51))
                 .shadow(Shadow::inner("#000000").opacity(0.15).blur(8.0))
                 .child(Row::new(children![
-                    section(Row::new(workspace_buttons).gap(5.), Start),
+                    section(Row::new(workspace_buttons).gap(rem * 0.005), Start),
                     section(
                         Text::new(format!("{} · {}", time, date))
                             .size(rem * 0.02)
@@ -209,7 +209,7 @@ impl Service for Clock {
     }
 }
 
-fn workspace_button(workspace: &Workspace) -> Rectangle {
+fn workspace_button(workspace: &Workspace, rem: f32) -> Rectangle {
     let fill = if workspace.focused() {
         "#dddddd"
     } else if workspace.urgent() {
@@ -220,18 +220,18 @@ fn workspace_button(workspace: &Workspace) -> Rectangle {
 
     let id = workspace.id();
 
-    let width = if workspace.focused() { 30. } else { 20. };
+    let width = if workspace.focused() { rem * 0.04 } else { rem * 0.025 };
 
     Rectangle::new()
         .width(width)
-        .height(20.)
+        .height(rem * 0.025)
         .fill(fill)
-        .radius(15.)
+        .radius(rem * 0.02)
         .align_child(Center, Center)
         .on_click(move |_| Workspaces::focus(id))
         .child(
             Text::new(workspace.index().to_string())
-                .size(12.)
+                .size(rem * 0.015)
                 .color(Color::rgb(51, 51, 51)),
         )
 }
