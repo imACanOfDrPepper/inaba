@@ -31,5 +31,6 @@ fn main() {
         .ipc("clear-notifs", clear_notifs)
         .lock(lock_screen)
         .scale_factor(*SCALE)
+        .font("JetBrains Mono") 
         .run();
 }

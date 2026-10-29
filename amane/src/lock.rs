@@ -37,7 +37,7 @@ pub fn lock_screen(_: &Monitor) -> LayerWindow {
                         .width(300.)
                         .height(40.)
                         .fill("#b2b2b2")
-                        .radius(12.)
+                        .radius(5.)
                         .padding(8.)
                         .child(
                             TextInput::new("password")

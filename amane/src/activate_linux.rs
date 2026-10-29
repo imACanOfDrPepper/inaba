@@ -1,6 +1,4 @@
-use amane::{
-    Color, Column, Horizontal, Layer, LayerWindow, Margin, Text, Vertical, children,
-};
+use amane::{Color, Column, Horizontal, Layer, LayerWindow, Margin, Text, Vertical, children};
 
 pub fn activate_linux() -> LayerWindow {
     LayerWindow::new()
@@ -19,9 +17,11 @@ pub fn activate_linux() -> LayerWindow {
         .child(Column::new(children![
             Text::new("Activate Linux")
                 .size(20.)
-                .color(Color::rgba(250, 250, 250, 100)),
+                .color(Color::rgba(250, 250, 250, 100))
+                .font("Inter"),
             Text::new("Go to Settings to activate Linux.")
                 .size(12.)
-                .color(Color::rgba(250, 250, 250, 100)),
+                .color(Color::rgba(250, 250, 250, 100))
+                .font("Inter"),
         ]))
 }

@@ -40,9 +40,10 @@ fn card(notif: &Notification) -> Rectangle {
     Rectangle::new()
         .width(Parent)
         .height(60.)
-        .radius(12.)
+        .radius(5.)
         .fill(fill)
         .padding(10.)
+        .border(1., Color::rgb(221, 221, 221))
         .on_click(move |_| Notifications::click(id))
         .align_child(Align::Start, Align::Center)
         .child(Column::new(children![

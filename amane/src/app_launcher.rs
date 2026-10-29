@@ -1,7 +1,8 @@
 use std::time::Duration;
 
 use amane::{
-    Apps, Center, Color, Column, Image, Keyboard, Layer, LayerWindow, Rectangle, Row, ScrollArea, Service, Size::Parent, Start, Text, TextInput, Widget, children
+    Apps, Center, Color, Column, Image, Keyboard, Layer, LayerWindow, Rectangle, Row, ScrollArea,
+    Service, Size::Parent, Start, Text, TextInput, Widget, children,
 };
 
 pub fn app_launcher() -> LayerWindow {
@@ -59,13 +60,15 @@ pub fn app_launcher() -> LayerWindow {
                 .width(Parent)
                 .height(Parent)
                 .fill("#333333")
+                .padding(10.)
+                .radius(5.)
+                .border(1., Color::rgb(221, 221, 221))
                 .child(Column::new(children![
                     Rectangle::new()
-                        .width(200.)
+                        .width(Parent)
                         .height(30.)
-                        .fill("#222222")
-                        .padding(8.)
-                        .align_child(Start, Center)
+                        .border(1., Color::rgb(221, 221, 221))
+                        .padding(5.)
                         .child(
                             TextInput::new("app_name")
                                 .placeholder("App Name")

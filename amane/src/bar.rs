@@ -2,8 +2,8 @@ use std::time::Duration;
 
 use amane::{
     Align, Audio, Battery, Button, Center, Color, End, Full, Layer, LayerWindow, Margin, Padding,
-    Parent, Rectangle, Row, Scroll, Service, Shadow, Start, Text, Vertical, Widget, Workspace,
-    Workspaces, Zone, children,
+    Parent, Rectangle, Row, Scroll, Service, Start, Text, Vertical, Widget, Workspace, Workspaces,
+    Zone, children,
 };
 
 pub fn bar() -> LayerWindow {
@@ -18,9 +18,9 @@ pub fn bar() -> LayerWindow {
     let audio = Audio::read();
 
     let audio_string = if audio.muted() {
-        String::from("   0%")
+        String::from("[VOL: MUT]")
     } else {
-        format!("  {}%", audio.volume())
+        format!("[VOL: {}]", audio.volume())
     };
 
     let audio_color = audio_color();
@@ -30,10 +30,22 @@ pub fn bar() -> LayerWindow {
 
     let workspaces = Workspaces::read();
 
-    let mut workspace_buttons: Vec<Box<dyn Widget>> = Vec::new();
+    let mut workspace_text = String::new();
 
     for workspace in workspaces.list() {
-        workspace_buttons.push(Box::new(workspace_button(workspace)));
+        workspace_text.push_str(if workspace.id() == 1 {
+            if workspace.focused() {
+                "o"
+            } else {
+                "."
+            }
+        } else {
+            if workspace.focused() {
+                "---o"
+            } else {
+                "---."
+            }
+        });
     }
 
     LayerWindow::new()
@@ -52,7 +64,7 @@ pub fn bar() -> LayerWindow {
             Rectangle::new()
                 .width(Parent)
                 .height(Parent)
-                .radius(12.)
+                .radius(5.)
                 .padding(Padding {
                     top: padding_v,
                     right: padding_h,
@@ -60,11 +72,13 @@ pub fn bar() -> LayerWindow {
                     left: padding_h,
                 })
                 .fill(Color::rgb(51, 51, 51))
-                .shadow(Shadow::inner("#000000").opacity(0.15).blur(8.0))
                 .child(Row::new(children![
-                    section(Row::new(workspace_buttons).gap(5.), Start),
                     section(
-                        Text::new(format!("{} · {}", time, date))
+                        Text::new(workspace_text).color(Color::rgb(221, 221, 221)),
+                        Start
+                    ),
+                    section(
+                        Text::new(format!("// {} // {} //", time, date))
                             .size(12.)
                             .color(Color::rgb(221, 221, 221)),
                         Center
@@ -95,59 +109,11 @@ fn battery_string() -> String {
         let battery = Battery::read().percent();
         let is_charging = Battery::read().charging();
 
-        let battery_icon = if is_charging {
-            if battery < 5 {
-                "󰢟"
-            } else if battery < 10 {
-                "󰢜"
-            } else if battery < 20 {
-                "󰂆"
-            } else if battery < 30 {
-                "󰂇"
-            } else if battery < 40 {
-                "󰂈"
-            } else if battery < 50 {
-                "󰢝"
-            } else if battery < 60 {
-                "󰂉"
-            } else if battery < 70 {
-                "󰢞"
-            } else if battery < 80 {
-                "󰂊"
-            } else if battery < 90 {
-                "󰂋"
-            } else {
-                "󰂅"
-            }
-        } else {
-            if battery < 5 {
-                "󱃍"
-            } else if battery < 10 {
-                "󰁺"
-            } else if battery < 20 {
-                "󰁻"
-            } else if battery < 30 {
-                "󰁼"
-            } else if battery < 40 {
-                "󰁽"
-            } else if battery < 50 {
-                "󰁾"
-            } else if battery < 60 {
-                "󰁿"
-            } else if battery < 70 {
-                "󰂀"
-            } else if battery < 80 {
-                "󰂁"
-            } else if battery < 90 {
-                "󰂂"
-            } else {
-                "󰁹"
-            }
-        };
+        let charge_text = if is_charging { " (CHR)" } else { "" };
 
-        format!("{battery_icon} {battery}%")
+        format!("[BAT: {battery}{charge_text}]")
     } else {
-        "".to_string()
+        "[BAT: NONE]".to_string()
     }
 }
 
@@ -189,8 +155,8 @@ struct Clock {
 impl Service for Clock {
     fn new() -> Self {
         Self {
-            time: amane::output("date +%H:%M"),
-            date: amane::output("date +'%b %d, %a'"),
+            time: amane::output("date +%^H:%^M"),
+            date: amane::output("date +'%^b %d, %^a'"),
         }
     }
 
@@ -207,31 +173,4 @@ impl Service for Clock {
 
         changed
     }
-}
-
-fn workspace_button(workspace: &Workspace) -> Rectangle {
-    let fill = if workspace.focused() {
-        "#dddddd"
-    } else if workspace.urgent() {
-        "#ff9999"
-    } else {
-        "#b2b2b2"
-    };
-
-    let id = workspace.id();
-
-    let width = if workspace.focused() { 25. } else { 15. };
-
-    Rectangle::new()
-        .width(width)
-        .height(15.)
-        .fill(fill)
-        .radius(12.)
-        .align_child(Center, Center)
-        .on_click(move |_| Workspaces::focus(id))
-        .child(
-            Text::new(workspace.index().to_string())
-                .size(10.)
-                .color(Color::rgb(51, 51, 51)),
-        )
 }
