@@ -14,9 +14,11 @@ use crate::notifs::{clear_notifs, notifs};
 
 use amane::App;
 
-static SCALE: LazyLock<f32> = std::sync::LazyLock::new(|| std::env::var("AMANE_SCALE_FACTOR")
-    .map(|value| value.parse::<f32>().expect("invalid AMANE_SCALE_FACTOR"))
-    .unwrap_or(1.0));
+static SCALE: LazyLock<f32> = std::sync::LazyLock::new(|| {
+    std::env::var("AMANE_SCALE_FACTOR")
+        .map(|value| value.parse::<f32>().expect("invalid AMANE_SCALE_FACTOR"))
+        .unwrap_or(1.0)
+});
 
 fn main() {
     toggle_launcher(&["".to_string()]);
@@ -31,6 +33,6 @@ fn main() {
         .ipc("clear-notifs", clear_notifs)
         .lock(lock_screen)
         .scale_factor(*SCALE)
-        .font("JetBrains Mono") 
+        .font("JetBrains Mono")
         .run();
 }

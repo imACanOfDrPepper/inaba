@@ -2,8 +2,8 @@ use std::time::Duration;
 
 use amane::{
     Align, Audio, Battery, Button, Center, Color, End, Full, Layer, LayerWindow, Margin, Padding,
-    Parent, Rectangle, Row, Scroll, Service, Start, Text, Vertical, Widget, Workspace, Workspaces,
-    Zone, children,
+    Parent, Rectangle, Row, Scroll, Service, Start, Text, Vertical, Widget, Workspaces, Zone,
+    children,
 };
 
 pub fn bar() -> LayerWindow {
@@ -34,17 +34,9 @@ pub fn bar() -> LayerWindow {
 
     for workspace in workspaces.list() {
         workspace_text.push_str(if workspace.id() == 1 {
-            if workspace.focused() {
-                "o"
-            } else {
-                "."
-            }
+            if workspace.focused() { "o" } else { "." }
         } else {
-            if workspace.focused() {
-                "---o"
-            } else {
-                "---."
-            }
+            if workspace.focused() { "---o" } else { "---." }
         });
     }
 
