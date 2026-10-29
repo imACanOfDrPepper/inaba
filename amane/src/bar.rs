@@ -1,18 +1,17 @@
 use std::time::Duration;
 
 use amane::{
-    Align, Audio, Battery, Button, Center, Color, End, Full, Layer, LayerWindow, Margin, Monitor,
-    Padding, Parent, Rectangle, Row, Scroll, Service, Shadow, Start, Text, Vertical, Widget,
-    Workspace, Workspaces, Zone, children,
+    Align, Audio, Battery, Button, Center, Color, End, Full, Layer, LayerWindow, Margin, Padding,
+    Parent, Rectangle, Row, Scroll, Service, Shadow, Start, Text, Vertical, Widget, Workspace,
+    Workspaces, Zone, children,
 };
 
-pub fn bar(monitor: &Monitor) -> LayerWindow {
-    let rem = monitor.width.min(monitor.height) as f32;
-    let margin_top = (rem * 0.01) as i32;
-    let margin_side = (rem * 0.02) as i32;
+pub fn bar() -> LayerWindow {
+    let margin_top = 10;
+    let margin_side = 15;
 
-    let padding_v = rem * 0.005;
-    let padding_h = rem * 0.02;
+    let padding_v = 3.;
+    let padding_h = 10.;
 
     let battery_string = battery_string();
 
@@ -34,12 +33,12 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
     let mut workspace_buttons: Vec<Box<dyn Widget>> = Vec::new();
 
     for workspace in workspaces.list() {
-        workspace_buttons.push(Box::new(workspace_button(workspace, rem)));
+        workspace_buttons.push(Box::new(workspace_button(workspace)));
     }
 
     LayerWindow::new()
         .width(Full)
-        .height(rem * 0.04)
+        .height(25.)
         .margin(Margin {
             top: margin_top,
             right: margin_side,
@@ -53,7 +52,7 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
             Rectangle::new()
                 .width(Parent)
                 .height(Parent)
-                .radius(rem * 0.02)
+                .radius(12.)
                 .padding(Padding {
                     top: padding_v,
                     right: padding_h,
@@ -63,10 +62,10 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
                 .fill(Color::rgb(51, 51, 51))
                 .shadow(Shadow::inner("#000000").opacity(0.15).blur(8.0))
                 .child(Row::new(children![
-                    section(Row::new(workspace_buttons).gap(rem * 0.005), Start),
+                    section(Row::new(workspace_buttons).gap(5.), Start),
                     section(
                         Text::new(format!("{} · {}", time, date))
-                            .size(rem * 0.02)
+                            .size(12.)
                             .color(Color::rgb(221, 221, 221)),
                         Center
                     ),
@@ -78,12 +77,13 @@ pub fn bar(monitor: &Monitor) -> LayerWindow {
                                 .on_click(clicked_audio)
                                 .on_scroll(scrolled_audio)
                                 .align_child(End, Center)
-                                .child(Text::new(audio_string).size(rem * 0.02).color(audio_color)),
+                                .child(Text::new(audio_string).size(12.).color(audio_color)),
                             Text::new(battery_string)
-                                .size(rem * 0.02)
+                                .size(12.)
                                 .color(Color::rgb(221, 221, 221))
                         ])
-                        .gap(12.),
+                        .gap(12.)
+                        .align(Center),
                         End
                     )
                 ])),
@@ -209,7 +209,7 @@ impl Service for Clock {
     }
 }
 
-fn workspace_button(workspace: &Workspace, rem: f32) -> Rectangle {
+fn workspace_button(workspace: &Workspace) -> Rectangle {
     let fill = if workspace.focused() {
         "#dddddd"
     } else if workspace.urgent() {
@@ -220,18 +220,18 @@ fn workspace_button(workspace: &Workspace, rem: f32) -> Rectangle {
 
     let id = workspace.id();
 
-    let width = if workspace.focused() { rem * 0.04 } else { rem * 0.025 };
+    let width = if workspace.focused() { 25. } else { 15. };
 
     Rectangle::new()
         .width(width)
-        .height(rem * 0.025)
+        .height(15.)
         .fill(fill)
-        .radius(rem * 0.02)
+        .radius(12.)
         .align_child(Center, Center)
         .on_click(move |_| Workspaces::focus(id))
         .child(
             Text::new(workspace.index().to_string())
-                .size(rem * 0.015)
+                .size(10.)
                 .color(Color::rgb(51, 51, 51)),
         )
 }

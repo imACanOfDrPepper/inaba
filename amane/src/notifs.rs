@@ -1,11 +1,9 @@
 use amane::{
-    Align, Color, Column, Horizontal, Layer, LayerWindow, Margin, Monitor, Notification,
-    Notifications, Rectangle, Service, Size::Parent, Text, Urgency, Vertical, Widget, children,
+    Align, Color, Column, Horizontal, Layer, LayerWindow, Margin, Notification, Notifications, Rectangle, Service, Size::Parent, Text, Urgency, Vertical, Widget, children
 };
 
-pub fn notifs(monitor: &Monitor) -> LayerWindow {
-    let rem = monitor.width.min(monitor.height) as f32;
-    let margin = (rem * 0.02) as i32;
+pub fn notifs() -> LayerWindow {
+    let margin = 30;
 
     let notifs = Notifications::read();
 
