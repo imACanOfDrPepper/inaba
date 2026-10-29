@@ -23,7 +23,7 @@ fn main() {
 
     App::new()
         .window(bar)
-        .window_per_monitor(activate_linux)
+        .window(activate_linux)
         .window(app_launcher)
         .window(notifs)
         .ipc("toggle-launcher", toggle_launcher)

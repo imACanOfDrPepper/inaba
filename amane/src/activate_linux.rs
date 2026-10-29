@@ -1,11 +1,11 @@
 use amane::{
-    Color, Column, Horizontal, Layer, LayerWindow, Margin, Monitor, Text, Vertical, children,
+    Color, Column, Horizontal, Layer, LayerWindow, Margin, Text, Vertical, children,
 };
 
-pub fn activate_linux(monitor: &Monitor) -> LayerWindow {
+pub fn activate_linux() -> LayerWindow {
     LayerWindow::new()
-        .width(monitor.width as f32 * 0.2)
-        .height(monitor.height as f32 * 0.1)
+        .width(200.)
+        .height(70.)
         .anchor_vertical(Vertical::Bottom)
         .anchor_horizontal(Horizontal::Right)
         .layer(Layer::Top)
