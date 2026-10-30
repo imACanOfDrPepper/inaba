@@ -2,16 +2,16 @@ use std::time::Duration;
 
 use amane::{
     Align::{Center, Start},
-    Apps, Color, Column, DesktopApp, Key, Keyboard, Layer, LayerWindow, Rectangle, ScrollArea,
-    Service,
+    Apps, Color, Column, Key, Keyboard, Layer, LayerWindow, Rectangle, ScrollArea, Service,
     Size::Parent,
     Text, TextInput, Widget, children,
 };
 
 pub fn app_launcher() -> LayerWindow {
     let launcher = AppLauncher::read();
+    let apps_list = Apps::read();
 
-    let apps = &launcher.apps;
+    let apps = apps_list.list();
 
     let mut rows: Vec<Box<dyn Widget>> = Vec::new();
 
@@ -123,8 +123,7 @@ pub fn app_launcher() -> LayerWindow {
 struct AppLauncher {
     open: bool,
     query: String,
-    selected: u32,
-    apps: Vec<DesktopApp>,
+    selected: i32,
 }
 
 impl Service for AppLauncher {
@@ -133,22 +132,11 @@ impl Service for AppLauncher {
             open: false,
             query: String::new(),
             selected: 0,
-            apps: Apps::read().list().to_vec(),
         }
     }
 
     fn interval() -> Duration {
-        Duration::from_secs(3)
-    }
-
-    fn update(&mut self) -> bool {
-        let apps = Apps::read().list().to_vec();
-
-        let changed = apps != self.apps;
-
-        self.apps = apps;
-
-        changed
+        Duration::from_secs(3600)
     }
 }
 
@@ -170,12 +158,30 @@ pub fn toggle_launcher(_: &[String]) -> String {
 }
 
 fn key_pressed(key: Key) {
+    let apps = &Apps::read().list().to_vec();
+    let mut filtered_apps = Vec::new();
+    let launcher_read = AppLauncher::read();
+
+    let query = &launcher_read.query;
+
+    for app in apps {
+        if !app.name().to_lowercase().contains(query) {
+            continue;
+        }
+
+        filtered_apps.push(app);
+    }
+
+    drop(launcher_read);
+
     let mut launcher = AppLauncher::write();
 
     if key == Key::Down {
         launcher.selected += 1;
+        launcher.selected = launcher.selected.rem_euclid(filtered_apps.len() as i32)
     } else if key == Key::Up {
-        launcher.selected = launcher.selected.saturating_sub(1);
+        launcher.selected = launcher.selected.overflowing_sub(1).0;
+        launcher.selected = launcher.selected.rem_euclid(filtered_apps.len() as i32)
     }
 }
 
@@ -193,7 +199,7 @@ fn launch_selected(text: String) {
         filtered_apps.push(app);
     }
 
-    let idx = selected.min((filtered_apps.len() - 1) as u32);
+    let idx = selected.min((filtered_apps.len() - 1) as i32);
 
     launcher.open = false;
     filtered_apps[idx as usize].launch();
