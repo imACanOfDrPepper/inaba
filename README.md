@@ -4,6 +4,10 @@ Inaba is a shell built in Amane.
 
 This is my own personal shell, if you wanna add something new then fork it yourself :)
 
+# Demo
+
+https://github.com/user-attachments/assets/b7eb84ff-6ff1-405b-85b5-fb7f752b6fba
+
 # Included
 
 - Bar
