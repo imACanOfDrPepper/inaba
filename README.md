@@ -38,6 +38,8 @@ Or start it with your compositor (Hyprland here):
 hl.on("hyprland.start", function() hl.exec_cmd("amane run") end)
 ```
 
+This config also uses an environment variable called `AMANE_SCALE_FACTOR`. The demo video uses a scale factor of `1.33`.
+
 # Dependencies
 
 - amane
