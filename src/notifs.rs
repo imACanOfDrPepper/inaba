@@ -1,5 +1,6 @@
 use amane::{
-    Align, Color, Column, Horizontal, Layer, LayerWindow, Margin, Notification, Notifications, Rectangle, Service, Size::Parent, Text, Urgency, Vertical, Widget, children
+    Align, Color, Column, Horizontal, Layer, LayerWindow, Margin, Notification, Notifications,
+    Rectangle, Service, Size::Parent, Text, Urgency, Vertical, Widget, children,
 };
 
 pub fn notifs() -> LayerWindow {
@@ -13,20 +14,23 @@ pub fn notifs() -> LayerWindow {
         cards.push(Box::new(card(notif)));
     }
 
-    LayerWindow::new()
-        .width(400.)
-        .height(400.)
-        .anchor_vertical(Vertical::Top)
-        .anchor_horizontal(Horizontal::Right)
-        .layer(Layer::Overlay)
-        .margin(Margin {
-            top: margin,
-            right: margin,
-            bottom: 0,
-            left: 0,
-        })
-        .visible(!notifs.list().is_empty())
-        .child(Column::new(cards).gap(8.))
+    if notifs.list().len() > 0 {
+        LayerWindow::new()
+            .width(400.)
+            .height(400.)
+            .anchor_vertical(Vertical::Top)
+            .anchor_horizontal(Horizontal::Right)
+            .layer(Layer::Overlay)
+            .margin(Margin {
+                top: margin,
+                right: margin,
+                bottom: 0,
+                left: 0,
+            })
+            .child(Column::new(cards).gap(8.))
+    } else {
+        LayerWindow::new().width(1.).height(1.).click_through()
+    }
 }
 
 fn card(notif: &Notification) -> Rectangle {

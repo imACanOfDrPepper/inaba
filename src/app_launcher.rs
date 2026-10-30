@@ -24,7 +24,6 @@ pub fn app_launcher() -> LayerWindow {
             continue;
         }
 
-
         let launched = app.clone();
 
         let app_name = if app.name().len() < 15 {
@@ -126,7 +125,7 @@ impl Service for AppLauncher {
             open: false,
             query: String::new(),
             selected: 0,
-            apps: Vec::new(),
+            apps: Apps::read().list().to_vec(),
         }
     }
 
@@ -175,7 +174,7 @@ fn key_pressed(key: Key) {
 fn launch_selected(text: String) {
     let apps = &Apps::read().list().to_vec();
     let selected = AppLauncher::read().selected;
-    let mut launcher= AppLauncher::write();
+    let mut launcher = AppLauncher::write();
     let mut filtered_apps = Vec::new();
 
     for app in apps {
