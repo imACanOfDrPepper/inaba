@@ -17,7 +17,7 @@ This is my first shell, so it's not amazing, but hey I made it :)
 # Installation
 
 Clone the repo:
-`git clone https://github.com/imACanOfDrPepper ~/.config/amane`
+`git clone https://github.com/imACanOfDrPepper/inaba ~/.config/amane`
 
 Build the shell and launch it:
 
@@ -42,7 +42,9 @@ hl.on("hyprland.start", function() hl.exec_cmd("amane run") end)
 
 # IPC
 
-Everything is driven through `amane ipc call`, so it is easy to bind in Niri:
+Everything is driven through `amane ipc call`, so it is easy to bind:
+
+`hl.bind(mainMod .. " + " .. "SPACE", hl.dsp.exec_cmd("amane ipc call toggle-launcher"))`
 
 <details>
 <summary>All IPC targets</summary>
