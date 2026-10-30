@@ -146,6 +146,7 @@ pub fn toggle_launcher(_: &[String]) -> String {
     if !launcher.open {
         launcher.query = "".to_string();
         TextInput::set_text("app_name", "");
+        launcher.selected = 0;
     }
 
     launcher.open = !launcher.open;
