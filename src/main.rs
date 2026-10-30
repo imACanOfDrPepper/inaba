@@ -21,8 +21,6 @@ static SCALE: LazyLock<f32> = std::sync::LazyLock::new(|| {
 });
 
 fn main() {
-    toggle_launcher(&["".to_string()]);
-
     App::new()
         .window(bar)
         .window(activate_linux)

@@ -11,14 +11,14 @@ use amane::{
 pub fn app_launcher() -> LayerWindow {
     let launcher = AppLauncher::read();
 
-    let apps = &AppLauncher::read().apps;
+    let apps = &launcher.apps;
 
     let mut rows: Vec<Box<dyn Widget>> = Vec::new();
 
     let mut idx = 0;
 
     for app in apps {
-        let query = &AppLauncher::read().query;
+        let query = &launcher.query;
 
         if !app.name().to_lowercase().contains(query) {
             continue;
@@ -43,7 +43,7 @@ pub fn app_launcher() -> LayerWindow {
             .height(13.)
             .cursor(amane::Cursor::Pointer)
             .on_click(move |_| {
-                toggle_launcher(&["".to_string()]);
+                toggle_launcher(&[]);
                 launched.launch();
             })
             .child(
@@ -57,7 +57,7 @@ pub fn app_launcher() -> LayerWindow {
         rows.push(Box::new(row));
     }
 
-    let app_launcher_widget = if AppLauncher::read().query != "" {
+    let app_launcher_widget = if launcher.query != "" {
         Column::new(children![
             Rectangle::new()
                 .width(Parent)
@@ -92,24 +92,32 @@ pub fn app_launcher() -> LayerWindow {
         ])
     };
 
-    LayerWindow::new()
-        .width(200.)
-        .height(300.)
-        .layer(Layer::Overlay)
-        .visible(launcher.open)
-        .keyboard(Keyboard::Exclusive)
-        .on_key(key_pressed)
-        .child(
-            Rectangle::new()
-                .width(Parent)
-                .height(Parent)
-                .fill("#333333")
-                .padding(10.)
-                .radius(5.)
-                .border(1., Color::rgb(221, 221, 221))
-                .align_child(Center, Start)
-                .child(app_launcher_widget),
-        )
+    if launcher.open {
+        LayerWindow::new()
+            .width(200.)
+            .height(300.)
+            .layer(Layer::Overlay)
+            .visible(launcher.open)
+            .keyboard(Keyboard::Exclusive)
+            .on_key(key_pressed)
+            .child(
+                Rectangle::new()
+                    .width(Parent)
+                    .height(Parent)
+                    .fill("#333333")
+                    .padding(10.)
+                    .radius(5.)
+                    .border(1., Color::rgb(221, 221, 221))
+                    .align_child(Center, Start)
+                    .child(app_launcher_widget),
+            )
+    } else {
+        LayerWindow::new()
+            .width(200.)
+            .height(300.)
+            .click_through()
+            .child(Rectangle::new().width(Parent).height(Parent).opacity(0.))
+    }
 }
 
 struct AppLauncher {
