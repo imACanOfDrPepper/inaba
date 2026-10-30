@@ -13,7 +13,7 @@ pub fn notifs() -> LayerWindow {
     for notif in notifs.list() {
         cards.push(Box::new(card(notif)));
     }
-
+    
     if notifs.list().len() > 0 {
         LayerWindow::new()
             .width(400.)
@@ -29,7 +29,13 @@ pub fn notifs() -> LayerWindow {
             })
             .child(Column::new(cards).gap(8.))
     } else {
-        LayerWindow::new().width(1.).height(1.).click_through()
+        LayerWindow::new()
+            .width(400.)
+            .height(400.)
+            .anchor_vertical(Vertical::Top)
+            .anchor_horizontal(Horizontal::Right)
+            .click_through()
+            .child(Column::new(cards).gap(8.))
     }
 }
 
