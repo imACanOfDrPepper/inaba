@@ -46,6 +46,7 @@ pub fn widgets() -> LayerWindow {
                 .width(Parent)
                 .height(Parent)
                 .fill(Color::rgb(51, 51, 51))
+                .border(2., Color::rgb(0, 0, 0))
                 .radius(5.)
                 .padding(10.)
                 .opacity(0.5)

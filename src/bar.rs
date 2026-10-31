@@ -1,7 +1,9 @@
 use std::time::Duration;
 
 use amane::{
-    Align, Audio, Battery, Button, Center, Color, Cursor::Pointer, End, Full, Layer, LayerWindow, Margin, Padding, Parent, Rectangle, Row, Scroll, Service, Start, Text, Vertical, Widget, Workspaces, Zone, children,
+    Align, Audio, Battery, Button, Center, Color, Cursor::Pointer, End, Full, Layer, LayerWindow,
+    Margin, Padding, Parent, Rectangle, Row, Scroll, Service, Start, Text, Vertical, Widget,
+    Workspaces, Zone, children,
 };
 
 pub fn bar() -> LayerWindow {
@@ -28,14 +30,35 @@ pub fn bar() -> LayerWindow {
 
     let workspaces = Workspaces::read();
 
-    let mut workspace_text = String::new();
+    let mut workspace_buttons: Vec<Box<dyn Widget>> = Vec::new();
 
-    for workspace in workspaces.list() {
-        workspace_text.push_str(if workspace.id() == 1 {
-            if workspace.focused() { "o" } else { "." }
-        } else {
-            if workspace.focused() { "---o" } else { "---." }
-        });
+    if workspaces.list().len() > 0 {
+        for i in 0..=workspaces.list().len() - 1 {
+            let workspace = &workspaces.list()[i];
+
+            let ws_id = workspace.id();
+            let ws_focus = workspace.focused();
+
+            let workspace_text = if ws_focus { "o" } else { "." };
+
+            workspace_buttons.push(Box::new(
+                Rectangle::new()
+                    .width(8.)
+                    .height(20.)
+                    .cursor(Pointer)
+                    .child(Text::new(workspace_text).color(Color::rgb(221, 221, 221)))
+                    .on_click(move |_| Workspaces::focus(ws_id)),
+            ));
+
+            if i != workspaces.list().len() - 1 {
+                workspace_buttons.push(Box::new(
+                    Rectangle::new()
+                        .width(26.)
+                        .height(20.)
+                        .child(Text::new("---").color(Color::rgb(221, 221, 221))),
+                ))
+            }
+        }
     }
 
     LayerWindow::new()
@@ -63,10 +86,7 @@ pub fn bar() -> LayerWindow {
                 })
                 .fill(Color::rgb(51, 51, 51))
                 .child(Row::new(children![
-                    section(
-                        Text::new(workspace_text).color(Color::rgb(221, 221, 221)),
-                        Start
-                    ),
+                    section(Row::new(workspace_buttons).gap(3.), Start),
                     section(
                         Text::new(format!("// {} // {} //", time, date))
                             .size(12.)
@@ -78,11 +98,19 @@ pub fn bar() -> LayerWindow {
                             Rectangle::new()
                                 .width(Parent)
                                 .height(Parent)
-                                .on_click(clicked_audio)
-                                .on_scroll(scrolled_audio)
                                 .align_child(End, Center)
-                                .cursor(Pointer)
-                                .child(Text::new(audio_string).size(12.).color(audio_color)),
+                                .child(
+                                    Rectangle::new()
+                                        .width(80.)
+                                        .height(Parent)
+                                        .on_click(clicked_audio)
+                                        .on_scroll(scrolled_audio)
+                                        .cursor(Pointer)
+                                        .align_child(End, Center)
+                                        .child(
+                                            Text::new(audio_string).size(12.).color(audio_color)
+                                        )
+                                ),
                             Text::new(battery_string)
                                 .size(12.)
                                 .color(Color::rgb(221, 221, 221))
