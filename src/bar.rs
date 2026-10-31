@@ -208,10 +208,12 @@ impl Service for Clock {
 
     fn update(&mut self) -> bool {
         let time = amane::output("date +%H:%M");
+        let date = amane::output("date +'%^b %d, %^a'");
 
-        let changed = time != self.time;
+        let changed = time != self.time || date != self.date;
 
         self.time = time;
+        self.date = date;
 
         changed
     }
