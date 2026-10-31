@@ -1,17 +1,14 @@
 use std::time::Duration;
 
 use amane::{
-    Align, Audio, Battery, Button, Center, Color, Cursor::Pointer, End, Full, Layer, LayerWindow,
-    Margin, Padding, Parent, Rectangle, Row, Scroll, Service, Start, Text, Vertical, Widget,
-    Workspaces, Zone, children,
+    Align, Audio, Battery, Button, Center, Color, Cursor::Pointer, End, Full,
+    Justify::SpaceBetween, Layer, LayerWindow, Margin, Padding, Parent, Rectangle, Row, Scroll,
+    Service, Start, Text, Vertical, Widget, Workspaces, Zone, children,
 };
 
 pub fn bar() -> LayerWindow {
     let margin_top = 10;
     let margin_side = 15;
-
-    let padding_v = 3.;
-    let padding_h = 10.;
 
     let battery_string = battery_string();
 
@@ -61,6 +58,8 @@ pub fn bar() -> LayerWindow {
         }
     }
 
+    let ws_width = (40 * workspaces.list().len()) as f32;
+
     LayerWindow::new()
         .width(Full)
         .height(25.)
@@ -74,52 +73,54 @@ pub fn bar() -> LayerWindow {
         .layer(Layer::Top)
         .space(Zone::Reserve)
         .child(
-            Rectangle::new()
-                .width(Parent)
-                .height(Parent)
-                .radius(5.)
-                .padding(Padding {
-                    top: padding_v,
-                    right: padding_h,
-                    bottom: padding_v,
-                    left: padding_h,
-                })
-                .fill(Color::rgb(51, 51, 51))
-                .child(Row::new(children![
-                    section(Row::new(workspace_buttons).gap(3.), Start),
-                    section(
+            Rectangle::new().width(Parent).height(Parent).child(
+                Row::new(children![
+                    pill(Row::new(workspace_buttons).gap(3.), Start, ws_width),
+                    pill(
                         Text::new(format!("// {} // {} //", time, date))
                             .size(12.)
                             .color(Color::rgb(221, 221, 221)),
-                        Center
+                        Center,
+                        220.
                     ),
-                    section(
-                        Row::new(children![
-                            Rectangle::new()
-                                .width(Parent)
-                                .height(Parent)
-                                .align_child(End, Center)
-                                .child(
+                    pill(
+                        Rectangle::new()
+                            .width(185.)
+                            .height(Parent)
+                            .align_child(Center, Center)
+                            .child(
+                                Row::new(children![
                                     Rectangle::new()
-                                        .width(85.)
+                                        .width(Parent)
                                         .height(Parent)
-                                        .on_click(clicked_audio)
-                                        .on_scroll(scrolled_audio)
-                                        .cursor(Pointer)
-                                        .align_child(End, Center)
+                                        .align_child(Center, Center)
                                         .child(
-                                            Text::new(audio_string).size(12.).color(audio_color)
-                                        )
-                                ),
-                            Text::new(battery_string)
-                                .size(12.)
-                                .color(Color::rgb(221, 221, 221))
-                        ])
-                        .gap(12.)
-                        .align(Center),
-                        End
+                                            Rectangle::new()
+                                                .width(85.)
+                                                .height(Parent)
+                                                .on_click(clicked_audio)
+                                                .on_scroll(scrolled_audio)
+                                                .cursor(Pointer)
+                                                .align_child(Center, Center)
+                                                .child(
+                                                    Text::new(audio_string)
+                                                        .size(12.)
+                                                        .color(audio_color)
+                                                )
+                                        ),
+                                    Text::new(battery_string)
+                                        .size(12.)
+                                        .color(Color::rgb(221, 221, 221))
+                                ])
+                                .gap(5.)
+                                .align(Center)
+                            ),
+                        End,
+                        200.
                     )
-                ])),
+                ])
+                .justify(SpaceBetween),
+            ),
         )
 }
 
@@ -142,6 +143,28 @@ fn section(content: impl Widget + 'static, align: impl Into<Align>) -> Rectangle
         .height(Parent)
         .align_child(align, Center)
         .child(content)
+}
+
+fn pill(content: impl Widget + 'static, align: impl Into<Align>, width: f32) -> Rectangle {
+    let padding_v = 3.;
+    let padding_h = 10.;
+
+    section(
+        Rectangle::new()
+            .width(width)
+            .height(Parent)
+            .fill(Color::rgb(51, 51, 51))
+            .radius(5.)
+            .padding(Padding {
+                top: padding_v,
+                right: padding_h,
+                bottom: padding_v,
+                left: padding_h,
+            })
+            .align_child(Center, Center)
+            .child(content),
+        align,
+    )
 }
 
 fn clicked_audio(_: Button) {
