@@ -11,10 +11,10 @@ pub fn widgets() -> LayerWindow {
 
     let symbol = if media.playing() { "||" } else { ">" };
 
-    let media_title = if media.title().len() < 20 {
+    let media_title = if media.title().chars().count() < 20 {
         media.title()
     } else {
-        &format!("{}..", &media.title()[..20])
+        &format!("{}..", &media.title().chars().take(20).collect::<String>())
     };
 
     let media_artist = if media.artist().len() < 15 {
@@ -30,8 +30,8 @@ pub fn widgets() -> LayerWindow {
     };
 
     LayerWindow::new()
-        .width(420.)
-        .height(69.)
+        .width(500.)
+        .height(70.)
         .layer(Bottom)
         .anchor_vertical(Top)
         .anchor_horizontal(Left)
