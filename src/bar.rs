@@ -18,9 +18,9 @@ pub fn bar() -> LayerWindow {
     let audio = Audio::read();
 
     let audio_string = if audio.muted() {
-        String::from("[VOL: MUT]")
+        String::from("[ VOL: MUT ]")
     } else {
-        format!("[VOL: {}]", audio.volume())
+        format!("[ VOL: {} ]", audio.volume())
     };
 
     let audio_color = audio_color();
@@ -101,7 +101,7 @@ pub fn bar() -> LayerWindow {
                                 .align_child(End, Center)
                                 .child(
                                     Rectangle::new()
-                                        .width(80.)
+                                        .width(85.)
                                         .height(Parent)
                                         .on_click(clicked_audio)
                                         .on_scroll(scrolled_audio)
@@ -130,9 +130,9 @@ fn battery_string() -> String {
 
         let charge_text = if is_charging { " (CHR)" } else { "" };
 
-        format!("[BAT: {battery}{charge_text}]")
+        format!("[ BAT: {battery}{charge_text} ]")
     } else {
-        "[BAT: NONE]".to_string()
+        "[ BAT: NONE ]".to_string()
     }
 }
 

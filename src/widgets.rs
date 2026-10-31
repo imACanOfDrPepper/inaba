@@ -1,10 +1,17 @@
 use amane::{
-    Align::Center, Button, Color, Column, Cursor::Pointer, Horizontal::Left, Layer::Bottom,
-    LayerWindow, Margin, Media, Rectangle, Row, Service, Size::Parent, Text, Vertical::Top, Widget,
-    children,
+    Align::Center,
+    Button, Color, Column, Cpu,
+    Cursor::Pointer,
+    Horizontal::{Left, Right},
+    Layer::Bottom,
+    LayerWindow, Margin, Media, Memory, Rectangle, Row, Service,
+    Size::Parent,
+    Text,
+    Vertical::Top,
+    Widget, children,
 };
 
-pub fn widgets() -> LayerWindow {
+pub fn media() -> LayerWindow {
     let margin = 30;
 
     let media = Media::read();
@@ -35,6 +42,7 @@ pub fn widgets() -> LayerWindow {
         .layer(Bottom)
         .anchor_vertical(Top)
         .anchor_horizontal(Left)
+        .namespace("amane-desktop-widget")
         .margin(Margin {
             top: margin,
             right: 0,
@@ -65,6 +73,44 @@ pub fn widgets() -> LayerWindow {
                     ])
                     .gap(5.),
                 ),
+        )
+}
+
+pub fn system() -> LayerWindow {
+    let margin = 30;
+
+    let cpu = Cpu::read();
+    let mem = Memory::read();
+
+    LayerWindow::new()
+        .width(150.)
+        .height(70.)
+        .layer(Bottom)
+        .anchor_vertical(Top)
+        .anchor_horizontal(Right)
+        .namespace("amane-desktop-widget")
+        .margin(Margin {
+            top: margin,
+            right: margin,
+            bottom: 0,
+            left: 0,
+        })
+        .child(
+            Rectangle::new()
+                .width(Parent)
+                .height(Parent)
+                .fill(Color::rgb(51, 51, 51))
+                .border(2., Color::rgb(0, 0, 0))
+                .radius(5.)
+                .padding(10.)
+                .opacity(0.5)
+                .align_child(Center, Center)
+                .child(section(
+                    Column::new(children![
+                        Text::new(format!("[ CPU: {} ]", cpu.percent())).color(Color::rgb(221, 221, 221)),
+                        Text::new(format!("[ MEM: {} ]", mem.percent())).color(Color::rgb(221, 221, 221)),
+                    ])
+                )),
         )
 }
 

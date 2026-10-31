@@ -12,7 +12,7 @@ use crate::app_launcher::{app_launcher, toggle_launcher};
 use crate::bar::bar;
 use crate::lock::{lock, lock_screen};
 use crate::notifs::{clear_notifs, notifs};
-use crate::widgets::widgets;
+use crate::widgets::{media, system};
 
 use amane::App;
 
@@ -28,7 +28,8 @@ fn main() {
         .window(activate_linux)
         .window(app_launcher)
         .window(notifs)
-        .window(widgets)
+        .window(media)
+        .window(system)
         .ipc("toggle-launcher", toggle_launcher)
         .ipc("lock-screen", lock)
         .ipc("clear-notifs", clear_notifs)
