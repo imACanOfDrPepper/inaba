@@ -4,7 +4,7 @@ Inaba is a shell built in Amane.
 
 # Demo
 
-https://github.com/user-attachments/assets/b7eb84ff-6ff1-405b-85b5-fb7f752b6fba
+https://github.com/user-attachments/assets/6f5bb9ee-aaa7-4d0e-a467-795db6e4e6da
 
 # Included
 
