@@ -1,9 +1,7 @@
 use std::time::Duration;
 
 use amane::{
-    Align, Audio, Battery, Button, Center, Color, End, Full, Layer, LayerWindow, Margin, Padding,
-    Parent, Rectangle, Row, Scroll, Service, Start, Text, Vertical, Widget, Workspaces, Zone,
-    children,
+    Align, Audio, Battery, Button, Center, Color, Cursor::Pointer, End, Full, Layer, LayerWindow, Margin, Padding, Parent, Rectangle, Row, Scroll, Service, Start, Text, Vertical, Widget, Workspaces, Zone, children,
 };
 
 pub fn bar() -> LayerWindow {
@@ -83,6 +81,7 @@ pub fn bar() -> LayerWindow {
                                 .on_click(clicked_audio)
                                 .on_scroll(scrolled_audio)
                                 .align_child(End, Center)
+                                .cursor(Pointer)
                                 .child(Text::new(audio_string).size(12.).color(audio_color)),
                             Text::new(battery_string)
                                 .size(12.)
