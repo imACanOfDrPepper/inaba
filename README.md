@@ -11,6 +11,7 @@ https://github.com/user-attachments/assets/6f5bb9ee-aaa7-4d0e-a467-795db6e4e6da
 - Bar
 - App launcher
 - Notification daemon
+- Desktop widgets
 - Lock screen
 - Haha funny Activate Linux widget
 
