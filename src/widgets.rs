@@ -24,10 +24,10 @@ pub fn media() -> LayerWindow {
         &format!("{}..", &media.title().chars().take(20).collect::<String>())
     };
 
-    let media_artist = if media.artist().len() < 15 {
+    let media_artist = if media.artist().chars().count() < 15 {
         media.artist()
     } else {
-        &format!("{}..", &media.artist()[..15])
+        &format!("{}..", &media.artist().chars().take(15).collect::<String>())
     };
 
     let label = if media.title() != "" {
