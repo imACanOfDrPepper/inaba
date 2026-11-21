@@ -12,7 +12,7 @@ use amane::{
 };
 
 pub fn media() -> LayerWindow {
-    let margin = 30;
+    let margin = 40;
 
     let media = Media::read();
 
@@ -37,8 +37,8 @@ pub fn media() -> LayerWindow {
     };
 
     LayerWindow::new()
-        .width(500.)
-        .height(70.)
+        .width(650.)
+        .height(90.)
         .layer(Bottom)
         .anchor_vertical(Top)
         .anchor_horizontal(Left)
@@ -56,19 +56,19 @@ pub fn media() -> LayerWindow {
                 .fill(Color::rgb(51, 51, 51))
                 .border(2., Color::rgb(0, 0, 0))
                 .radius(5.)
-                .padding(10.)
+                .padding(12.)
                 .opacity(0.5)
                 .align_child(Center, Center)
                 .child(
                     Column::new(children![
-                        section(Text::new(label).color(Color::rgb(221, 221, 221))),
+                        section(Text::new(label).color(Color::rgb(221, 221, 221)).size(20.)),
                         section(
                             Row::new(children![
                                 button("<<", |_| Media::previous()),
                                 button(symbol, |_| Media::play_pause()),
                                 button(">>", |_| Media::next()),
                             ])
-                            .gap(10.)
+                            .gap(12.)
                         )
                     ])
                     .gap(5.),
@@ -77,18 +77,19 @@ pub fn media() -> LayerWindow {
 }
 
 pub fn system() -> LayerWindow {
-    let margin = 30;
+    let margin = 40;
 
     let cpu = Cpu::read();
     let mem = Memory::read();
 
     LayerWindow::new()
-        .width(150.)
-        .height(70.)
+        .width(200.)
+        .height(90.)
         .layer(Bottom)
         .anchor_vertical(Top)
         .anchor_horizontal(Right)
         .namespace("amane-desktop-widget")
+        .namespace("inaba-desktop-widget")
         .margin(Margin {
             top: margin,
             right: margin,
@@ -102,15 +103,17 @@ pub fn system() -> LayerWindow {
                 .fill(Color::rgb(51, 51, 51))
                 .border(2., Color::rgb(0, 0, 0))
                 .radius(5.)
-                .padding(10.)
+                .padding(12.)
                 .opacity(0.5)
                 .align_child(Center, Center)
-                .child(section(
-                    Column::new(children![
-                        Text::new(format!("[ CPU: {} ]", cpu.percent())).color(Color::rgb(221, 221, 221)),
-                        Text::new(format!("[ MEM: {} ]", mem.percent())).color(Color::rgb(221, 221, 221)),
-                    ])
-                )),
+                .child(section(Column::new(children![
+                    Text::new(format!("[ CPU: {} ]", cpu.percent()))
+                        .color(Color::rgb(221, 221, 221))
+                        .size(20.),
+                    Text::new(format!("[ MEM: {} ]", mem.percent()))
+                        .color(Color::rgb(221, 221, 221))
+                        .size(20.),
+                ]))),
         )
 }
 
@@ -124,12 +127,12 @@ fn section(widget: impl Widget + 'static) -> Rectangle {
 
 fn button(label: &str, clicked: fn(Button)) -> Rectangle {
     Rectangle::new()
-        .width(40.)
+        .width(60.)
         .height(Parent)
         .fill(Color::rgb(0, 0, 0))
         .align_child(Center, Center)
         .radius(5.)
         .on_click(clicked)
         .cursor(Pointer)
-        .child(Text::new(label).color(Color::rgb(221, 221, 221)))
+        .child(Text::new(label).color(Color::rgb(221, 221, 221)).size(20.))
 }

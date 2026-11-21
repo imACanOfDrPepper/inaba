@@ -2,25 +2,25 @@ use amane::{Color, Column, Horizontal, Layer, LayerWindow, Margin, Text, Vertica
 
 pub fn activate_linux() -> LayerWindow {
     LayerWindow::new()
-        .width(200.)
-        .height(70.)
+        .width(300.)
+        .height(100.)
         .anchor_vertical(Vertical::Bottom)
         .anchor_horizontal(Horizontal::Right)
         .layer(Layer::Top)
         .margin(Margin {
             top: 0,
-            right: 30,
-            bottom: 30,
+            right: 50,
+            bottom: 50,
             left: 0,
         })
         .click_through()
         .child(Column::new(children![
             Text::new("Activate Linux")
-                .size(20.)
+                .size(30.)
                 .color(Color::rgba(250, 250, 250, 100))
                 .font("Inter"),
             Text::new("Go to Settings to activate Linux.")
-                .size(12.)
+                .size(18.)
                 .color(Color::rgba(250, 250, 250, 100))
                 .font("Inter"),
         ]))

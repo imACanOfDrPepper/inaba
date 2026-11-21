@@ -5,8 +5,6 @@ mod lock;
 mod notifs;
 mod widgets;
 
-use std::sync::LazyLock;
-
 use crate::activate_linux::activate_linux;
 use crate::app_launcher::{app_launcher, toggle_launcher};
 use crate::bar::bar;
@@ -15,12 +13,6 @@ use crate::notifs::{clear_notifs, notifs};
 use crate::widgets::{media, system};
 
 use amane::App;
-
-static SCALE: LazyLock<f32> = std::sync::LazyLock::new(|| {
-    std::env::var("AMANE_SCALE_FACTOR")
-        .map(|value| value.parse::<f32>().expect("invalid AMANE_SCALE_FACTOR"))
-        .unwrap_or(1.0)
-});
 
 fn main() {
     App::new()
@@ -34,7 +26,6 @@ fn main() {
         .ipc("lock-screen", lock)
         .ipc("clear-notifs", clear_notifs)
         .lock(lock_screen)
-        .scale_factor(*SCALE)
         .font("JetBrains Mono")
         .run();
 }

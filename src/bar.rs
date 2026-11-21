@@ -7,8 +7,8 @@ use amane::{
 };
 
 pub fn bar() -> LayerWindow {
-    let margin_top = 10;
-    let margin_side = 15;
+    let margin_top = 12;
+    let margin_side = 20;
 
     let battery_string = battery_string();
 
@@ -40,29 +40,33 @@ pub fn bar() -> LayerWindow {
 
             workspace_buttons.push(Box::new(
                 Rectangle::new()
-                    .width(8.)
-                    .height(20.)
+                    .width(10.)
+                    .height(25.)
                     .cursor(Pointer)
-                    .child(Text::new(workspace_text).color(Color::rgb(221, 221, 221)))
+                    .child(
+                        Text::new(workspace_text)
+                            .color(Color::rgb(221, 221, 221))
+                            .size(20.),
+                    )
                     .on_click(move |_| Workspaces::focus(ws_id)),
             ));
 
             if i != workspaces.list().len() - 1 {
                 workspace_buttons.push(Box::new(
                     Rectangle::new()
-                        .width(26.)
-                        .height(20.)
-                        .child(Text::new("---").color(Color::rgb(221, 221, 221))),
+                        .width(32.)
+                        .height(25.)
+                        .child(Text::new("---").color(Color::rgb(221, 221, 221)).size(20.)),
                 ))
             }
         }
     }
 
-    let ws_width = (40 * workspaces.list().len()) as f32;
+    let ws_width = (50 * workspaces.list().len()) as f32;
 
     LayerWindow::new()
         .width(Full)
-        .height(25.)
+        .height(32.)
         .margin(Margin {
             top: margin_top,
             right: margin_side,
@@ -75,48 +79,35 @@ pub fn bar() -> LayerWindow {
         .child(
             Rectangle::new().width(Parent).height(Parent).child(
                 Row::new(children![
-                    pill(Row::new(workspace_buttons).gap(3.), Start, ws_width),
+                    pill(Row::new(workspace_buttons).gap(5.), Start, ws_width),
                     pill(
                         Text::new(format!("// {} // {} //", time, date))
-                            .size(12.)
                             .color(Color::rgb(221, 221, 221)),
                         Center,
-                        220.
+                        280.
                     ),
                     pill(
                         Rectangle::new()
-                            .width(185.)
+                            .width(100.) // This is set to less than required, so Amane automagically chooses the right value
                             .height(Parent)
                             .align_child(Center, Center)
                             .child(
                                 Row::new(children![
                                     Rectangle::new()
-                                        .width(Parent)
+                                        .width(110.)
                                         .height(Parent)
+                                        .on_click(clicked_audio)
+                                        .on_scroll(scrolled_audio)
+                                        .cursor(Pointer)
                                         .align_child(Center, Center)
-                                        .child(
-                                            Rectangle::new()
-                                                .width(85.)
-                                                .height(Parent)
-                                                .on_click(clicked_audio)
-                                                .on_scroll(scrolled_audio)
-                                                .cursor(Pointer)
-                                                .align_child(Center, Center)
-                                                .child(
-                                                    Text::new(audio_string)
-                                                        .size(12.)
-                                                        .color(audio_color)
-                                                )
-                                        ),
-                                    Text::new(battery_string)
-                                        .size(12.)
-                                        .color(Color::rgb(221, 221, 221))
+                                        .child(Text::new(audio_string).color(audio_color)),
+                                    Text::new(battery_string).color(Color::rgb(221, 221, 221))
                                 ])
                                 .gap(5.)
                                 .align(Center)
                             ),
                         End,
-                        200.
+                        260.
                     )
                 ])
                 .justify(SpaceBetween),
@@ -146,8 +137,8 @@ fn section(content: impl Widget + 'static, align: impl Into<Align>) -> Rectangle
 }
 
 fn pill(content: impl Widget + 'static, align: impl Into<Align>, width: f32) -> Rectangle {
-    let padding_v = 3.;
-    let padding_h = 10.;
+    let padding_v = 5.;
+    let padding_h = 12.;
 
     section(
         Rectangle::new()

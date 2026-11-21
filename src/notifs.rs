@@ -4,7 +4,7 @@ use amane::{
 };
 
 pub fn notifs() -> LayerWindow {
-    let margin = 30;
+    let margin = 40;
 
     let notifs = Notifications::read();
 
@@ -13,11 +13,11 @@ pub fn notifs() -> LayerWindow {
     for notif in notifs.list() {
         cards.push(Box::new(card(notif)));
     }
-    
+
     if notifs.list().len() > 0 {
         LayerWindow::new()
-            .width(400.)
-            .height(400.)
+            .width(600.)
+            .height(600.)
             .anchor_vertical(Vertical::Top)
             .anchor_horizontal(Horizontal::Right)
             .layer(Layer::Overlay)
@@ -30,8 +30,8 @@ pub fn notifs() -> LayerWindow {
             .child(Column::new(cards).gap(8.))
     } else {
         LayerWindow::new()
-            .width(400.)
-            .height(400.)
+            .width(600.)
+            .height(600.)
             .anchor_vertical(Vertical::Top)
             .anchor_horizontal(Horizontal::Right)
             .click_through()
@@ -49,10 +49,10 @@ fn card(notif: &Notification) -> Rectangle {
 
     Rectangle::new()
         .width(Parent)
-        .height(60.)
+        .height(80.)
         .radius(5.)
         .fill(fill)
-        .padding(10.)
+        .padding(12.)
         .border(1., Color::rgb(221, 221, 221))
         .on_click(move |_| Notifications::click(id))
         .align_child(Align::Start, Align::Center)
@@ -61,12 +61,12 @@ fn card(notif: &Notification) -> Rectangle {
                 Text::new(notif.summary())
                     .elide()
                     .color(Color::rgb(221, 221, 221))
+                    .size(20.)
             ),
             section(
                 Text::new(notif.body())
                     .elide()
                     .color(Color::rgb(221, 221, 221))
-                    .size(12.)
             ),
         ]))
 }

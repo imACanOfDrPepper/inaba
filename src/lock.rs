@@ -34,7 +34,7 @@ pub fn lock_screen(_: &Monitor) -> LayerWindow {
                 Column::new(children![
                     Text::new(status).size(24.).color(text_color),
                     Rectangle::new()
-                        .width(300.)
+                        .width(500.)
                         .height(40.)
                         .fill("#b2b2b2")
                         .radius(5.)

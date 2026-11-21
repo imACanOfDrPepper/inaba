@@ -39,8 +39,8 @@ pub fn app_launcher() -> LayerWindow {
         };
 
         let row = Rectangle::new()
-            .width(300.)
-            .height(13.)
+            .width(400.)
+            .height(16.)
             .cursor(amane::Cursor::Pointer)
             .on_click(move |_| {
                 toggle_launcher(&[]);
@@ -48,7 +48,7 @@ pub fn app_launcher() -> LayerWindow {
             })
             .child(
                 Text::new(format!("[ {} ]", app_name))
-                    .size(13.)
+                    .size(16.)
                     .color(color),
             );
 
@@ -61,12 +61,13 @@ pub fn app_launcher() -> LayerWindow {
         Column::new(children![
             Rectangle::new()
                 .width(Parent)
-                .height(30.)
+                .height(40.)
                 .border(1., Color::rgb(221, 221, 221))
                 .padding(5.)
                 .child(
                     TextInput::new("app_name")
                         .placeholder("App Name")
+                        .size(22.)
                         .color(Color::rgb(221, 221, 221))
                         .focused()
                         .on_change(|txt| {
@@ -76,7 +77,7 @@ pub fn app_launcher() -> LayerWindow {
                         })
                         .on_submit(launch_selected)
                 ),
-            ScrollArea::new("apps", Column::new(rows).gap(10.)),
+            ScrollArea::new("apps", Column::new(rows).gap(12.)),
         ])
         .gap(10.)
     } else {
@@ -84,18 +85,23 @@ pub fn app_launcher() -> LayerWindow {
             Rectangle::new().width(1.).height(1.).child(
                 TextInput::new("app_name")
                     .on_change(|txt| AppLauncher::write().query = txt)
+                    .size(22.)
                     .color(Color::rgb(51, 51, 51))
                     .focused()
             ),
-            Text::new("-- WELCOME --").color(Color::rgb(221, 221, 221)),
-            Text::new("TYPE ANYTHING").color(Color::rgb(221, 221, 221)),
+            Text::new("-- WELCOME --")
+                .color(Color::rgb(221, 221, 221))
+                .size(22.),
+            Text::new("TYPE ANYTHING")
+                .color(Color::rgb(221, 221, 221))
+                .size(22.),
         ])
     };
 
     if launcher.open {
         LayerWindow::new()
-            .width(200.)
-            .height(300.)
+            .width(250.)
+            .height(400.)
             .layer(Layer::Overlay)
             .visible(launcher.open)
             .keyboard(Keyboard::Exclusive)
@@ -105,7 +111,7 @@ pub fn app_launcher() -> LayerWindow {
                     .width(Parent)
                     .height(Parent)
                     .fill("#333333")
-                    .padding(10.)
+                    .padding(15.)
                     .radius(5.)
                     .border(1., Color::rgb(221, 221, 221))
                     .align_child(Center, Start)
@@ -113,8 +119,8 @@ pub fn app_launcher() -> LayerWindow {
             )
     } else {
         LayerWindow::new()
-            .width(200.)
-            .height(300.)
+            .width(250.)
+            .height(400.)
             .click_through()
             .child(Rectangle::new().width(Parent).height(Parent).opacity(0.))
     }
