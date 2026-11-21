@@ -189,6 +189,8 @@ fn key_pressed(key: Key) {
     } else if key == Key::Up {
         launcher.selected = launcher.selected.overflowing_sub(1).0;
         launcher.selected = launcher.selected.rem_euclid(filtered_apps.len() as i32)
+    } else if key == Key::Escape {
+        launcher.open = false;
     }
 }
 
