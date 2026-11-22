@@ -3,6 +3,7 @@ mod app_launcher;
 mod bar;
 mod lock;
 mod notifs;
+pub mod palette;
 mod widgets;
 
 use crate::activate_linux::activate_linux;

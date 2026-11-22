@@ -1,7 +1,9 @@
 use amane::{
-    Align, Color, Column, Horizontal, Layer, LayerWindow, Margin, Notification, Notifications,
-    Rectangle, Service, Size::Parent, Text, Urgency, Vertical, Widget, children,
+    Align, Column, Horizontal, Layer, LayerWindow, Margin, Notification, Notifications, Rectangle,
+    Service, Size::Parent, Text, Urgency, Vertical, Widget, children,
 };
+
+use crate::palette::{BLACK, RED, WHITE};
 
 pub fn notifs() -> LayerWindow {
     let margin = 40;
@@ -41,8 +43,8 @@ pub fn notifs() -> LayerWindow {
 
 fn card(notif: &Notification) -> Rectangle {
     let fill = match notif.urgency() {
-        Urgency::Critical => "#aa4444",
-        _ => "#333333",
+        Urgency::Critical => RED,
+        _ => BLACK,
     };
 
     let id = notif.id();
@@ -53,21 +55,12 @@ fn card(notif: &Notification) -> Rectangle {
         .radius(5.)
         .fill(fill)
         .padding(12.)
-        .border(1., Color::rgb(221, 221, 221))
+        .border(1., WHITE)
         .on_click(move |_| Notifications::click(id))
         .align_child(Align::Start, Align::Center)
         .child(Column::new(children![
-            section(
-                Text::new(notif.summary())
-                    .elide()
-                    .color(Color::rgb(221, 221, 221))
-                    .size(20.)
-            ),
-            section(
-                Text::new(notif.body())
-                    .elide()
-                    .color(Color::rgb(221, 221, 221))
-            ),
+            section(Text::new(notif.summary()).elide().color(WHITE).size(20.)),
+            section(Text::new(notif.body()).elide().color(WHITE)),
         ]))
 }
 

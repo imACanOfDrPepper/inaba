@@ -3,6 +3,8 @@ use amane::{
     Service, Size::Parent, Text, TextInput, children,
 };
 
+use crate::palette::{BLACK, GRAY, RED, WHITE};
+
 pub fn lock_screen(_: &Monitor) -> LayerWindow {
     let lock = Lock::read();
 
@@ -14,11 +16,7 @@ pub fn lock_screen(_: &Monitor) -> LayerWindow {
         "[ LOCKED ]"
     };
 
-    let text_color = if lock.failed() {
-        Color::rgb(255, 153, 153)
-    } else {
-        Color::rgb(51, 51, 51)
-    };
+    let text_color = if lock.failed() { RED } else { BLACK };
 
     LayerWindow::new().width(1.).height(1.).child(
         Rectangle::new()
@@ -36,23 +34,23 @@ pub fn lock_screen(_: &Monitor) -> LayerWindow {
                     Rectangle::new()
                         .width(500.)
                         .height(40.)
-                        .fill("#b2b2b2")
+                        .fill(GRAY)
                         .radius(5.)
                         .padding(8.)
-                        .border(1., Color::rgb(51, 51, 51))
+                        .border(1., BLACK)
                         .child(
                             TextInput::new("password")
                                 .placeholder("Password")
                                 .password()
                                 .focused()
-                                .color(Color::rgb(51, 51, 51))
+                                .color(BLACK)
                                 .on_submit(|password| Lock::unlock(&password)),
                         ),
                     Rectangle::new().width(500.).height(40.).child(
                         Row::new(children![
-                            button("[ SUSPEND ]", "suspend", Color::rgb(221, 221, 221)),
-                            button("[ REBOOT ]", "reboot", Color::rgb(255, 153, 153)),
-                            button("[ SHUTDOWN ]", "poweroff", Color::rgb(255, 153, 153))
+                            button("[ SUSPEND ]", "suspend", WHITE),
+                            button("[ REBOOT ]", "reboot", RED),
+                            button("[ SHUTDOWN ]", "poweroff", RED)
                         ])
                         .gap(5.)
                     ),
@@ -75,7 +73,7 @@ fn button(string: &'static str, command: &'static str, color: Color) -> Rectangl
         .cursor(Pointer)
         .radius(5.)
         .align_child(Center, Center)
-        .fill(Color::rgb(51, 51, 51))
+        .fill(BLACK)
         .on_click(|_| amane::spawn(command))
         .child(Text::new(string).color(color))
 }

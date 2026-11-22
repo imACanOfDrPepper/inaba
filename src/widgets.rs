@@ -1,6 +1,6 @@
 use amane::{
     Align::Center,
-    Button, Color, Column, Cpu,
+    Button, Column, Cpu,
     Cursor::Pointer,
     Horizontal::{Left, Right},
     Layer::Bottom,
@@ -10,6 +10,8 @@ use amane::{
     Vertical::Top,
     Widget, children,
 };
+
+use crate::palette::{BLACK, BLACKER, WHITE};
 
 pub fn media() -> LayerWindow {
     let margin = 40;
@@ -43,6 +45,7 @@ pub fn media() -> LayerWindow {
         .anchor_vertical(Top)
         .anchor_horizontal(Left)
         .namespace("amane-desktop-widget")
+        .namespace("inaba-desktop-widget")
         .margin(Margin {
             top: margin,
             right: 0,
@@ -53,15 +56,15 @@ pub fn media() -> LayerWindow {
             Rectangle::new()
                 .width(Parent)
                 .height(Parent)
-                .fill(Color::rgb(51, 51, 51))
-                .border(2., Color::rgb(0, 0, 0))
+                .fill(BLACK)
+                .border(2., BLACKER)
                 .radius(5.)
                 .padding(12.)
                 .opacity(0.5)
                 .align_child(Center, Center)
                 .child(
                     Column::new(children![
-                        section(Text::new(label).color(Color::rgb(221, 221, 221)).size(20.)),
+                        section(Text::new(label).color(WHITE).size(20.)),
                         section(
                             Row::new(children![
                                 button("<<", |_| Media::previous()),
@@ -100,18 +103,18 @@ pub fn system() -> LayerWindow {
             Rectangle::new()
                 .width(Parent)
                 .height(Parent)
-                .fill(Color::rgb(51, 51, 51))
-                .border(2., Color::rgb(0, 0, 0))
+                .fill(BLACK)
+                .border(2., BLACKER)
                 .radius(5.)
                 .padding(12.)
                 .opacity(0.5)
                 .align_child(Center, Center)
                 .child(section(Column::new(children![
                     Text::new(format!("[ CPU: {} ]", cpu.percent()))
-                        .color(Color::rgb(221, 221, 221))
+                        .color(WHITE)
                         .size(20.),
                     Text::new(format!("[ MEM: {} ]", mem.percent()))
-                        .color(Color::rgb(221, 221, 221))
+                        .color(WHITE)
                         .size(20.),
                 ]))),
         )
@@ -129,10 +132,10 @@ fn button(label: &str, clicked: fn(Button)) -> Rectangle {
     Rectangle::new()
         .width(60.)
         .height(Parent)
-        .fill(Color::rgb(0, 0, 0))
+        .fill(BLACKER)
         .align_child(Center, Center)
         .radius(5.)
         .on_click(clicked)
         .cursor(Pointer)
-        .child(Text::new(label).color(Color::rgb(221, 221, 221)).size(20.))
+        .child(Text::new(label).color(WHITE).size(20.))
 }

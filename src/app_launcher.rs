@@ -2,10 +2,12 @@ use std::time::Duration;
 
 use amane::{
     Align::{Center, Start},
-    Apps, Color, Column, Key, Keyboard, Layer, LayerWindow, Rectangle, ScrollArea, Service,
+    Apps, Column, Key, Keyboard, Layer, LayerWindow, Rectangle, ScrollArea, Service,
     Size::Parent,
     Text, TextInput, Widget, children,
 };
+
+use crate::palette::{BLACK, DARK_GRAY, WHITE};
 
 pub fn app_launcher() -> LayerWindow {
     let launcher = AppLauncher::read();
@@ -33,9 +35,9 @@ pub fn app_launcher() -> LayerWindow {
         };
 
         let color = if idx == launcher.selected {
-            Color::rgb(221, 221, 221)
+            WHITE
         } else {
-            Color::rgb(152, 152, 152)
+            DARK_GRAY
         };
 
         let row = Rectangle::new()
@@ -49,7 +51,7 @@ pub fn app_launcher() -> LayerWindow {
             .child(
                 Text::new(format!("[ {} ]", app_name))
                     .size(16.)
-                    .color(color),
+                    .color(color.into()),
             );
 
         idx += 1;
@@ -62,13 +64,13 @@ pub fn app_launcher() -> LayerWindow {
             Rectangle::new()
                 .width(Parent)
                 .height(40.)
-                .border(1., Color::rgb(221, 221, 221))
+                .border(1., WHITE)
                 .padding(5.)
                 .child(
                     TextInput::new("app_name")
                         .placeholder("App Name")
                         .size(22.)
-                        .color(Color::rgb(221, 221, 221))
+                        .color(WHITE)
                         .focused()
                         .on_change(|txt| {
                             let mut launcher = AppLauncher::write();
@@ -86,15 +88,11 @@ pub fn app_launcher() -> LayerWindow {
                 TextInput::new("app_name")
                     .on_change(|txt| AppLauncher::write().query = txt)
                     .size(22.)
-                    .color(Color::rgb(51, 51, 51))
+                    .color(BLACK)
                     .focused()
             ),
-            Text::new("-- WELCOME --")
-                .color(Color::rgb(221, 221, 221))
-                .size(22.),
-            Text::new("TYPE ANYTHING")
-                .color(Color::rgb(221, 221, 221))
-                .size(22.),
+            Text::new("-- WELCOME --").color(WHITE).size(22.),
+            Text::new("TYPE ANYTHING").color(WHITE).size(22.),
         ])
     };
 
@@ -113,7 +111,7 @@ pub fn app_launcher() -> LayerWindow {
                     .fill("#333333")
                     .padding(15.)
                     .radius(5.)
-                    .border(1., Color::rgb(221, 221, 221))
+                    .border(1., WHITE)
                     .align_child(Center, Start)
                     .child(app_launcher_widget),
             )

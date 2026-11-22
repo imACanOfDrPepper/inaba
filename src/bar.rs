@@ -6,6 +6,8 @@ use amane::{
     Service, Start, Text, Vertical, Widget, Workspaces, Zone, children,
 };
 
+use crate::palette::{BLACK, RED, WHITE};
+
 pub fn bar() -> LayerWindow {
     let margin_top = 12;
     let margin_side = 20;
@@ -43,11 +45,7 @@ pub fn bar() -> LayerWindow {
                     .width(10.)
                     .height(25.)
                     .cursor(Pointer)
-                    .child(
-                        Text::new(workspace_text)
-                            .color(Color::rgb(221, 221, 221))
-                            .size(20.),
-                    )
+                    .child(Text::new(workspace_text).color(WHITE).size(20.))
                     .on_click(move |_| Workspaces::focus(ws_id)),
             ));
 
@@ -56,7 +54,7 @@ pub fn bar() -> LayerWindow {
                     Rectangle::new()
                         .width(32.)
                         .height(25.)
-                        .child(Text::new("---").color(Color::rgb(221, 221, 221)).size(20.)),
+                        .child(Text::new("---").color(WHITE).size(20.)),
                 ))
             }
         }
@@ -81,8 +79,7 @@ pub fn bar() -> LayerWindow {
                 Row::new(children![
                     pill(Row::new(workspace_buttons).gap(5.), Start, ws_width),
                     pill(
-                        Text::new(format!("// {} // {} //", time, date))
-                            .color(Color::rgb(221, 221, 221)),
+                        Text::new(format!("// {} // {} //", time, date)).color(WHITE),
                         Center,
                         280.
                     ),
@@ -101,7 +98,7 @@ pub fn bar() -> LayerWindow {
                                         .cursor(Pointer)
                                         .align_child(Center, Center)
                                         .child(Text::new(audio_string).color(audio_color)),
-                                    Text::new(battery_string).color(Color::rgb(221, 221, 221))
+                                    Text::new(battery_string).color(WHITE)
                                 ])
                                 .gap(5.)
                                 .align(Center)
@@ -144,7 +141,7 @@ fn pill(content: impl Widget + 'static, align: impl Into<Align>, width: f32) -> 
         Rectangle::new()
             .width(width)
             .height(Parent)
-            .fill(Color::rgb(51, 51, 51))
+            .fill(BLACK)
             .radius(5.)
             .padding(Padding {
                 top: padding_v,
@@ -173,11 +170,7 @@ fn scrolled_audio(scroll: Scroll) {
 }
 
 fn audio_color() -> Color {
-    if Audio::read().muted() {
-        Color::rgb(255, 153, 153)
-    } else {
-        Color::rgb(221, 221, 221)
-    }
+    if Audio::read().muted() { RED } else { WHITE }
 }
 
 struct Clock {
