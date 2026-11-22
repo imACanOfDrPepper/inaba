@@ -42,9 +42,9 @@ pub fn notifs() -> LayerWindow {
 }
 
 fn card(notif: &Notification) -> Rectangle {
-    let fill = match notif.urgency() {
+    let border = match notif.urgency() {
         Urgency::Critical => RED,
-        _ => BLACK,
+        _ => WHITE,
     };
 
     let id = notif.id();
@@ -53,9 +53,9 @@ fn card(notif: &Notification) -> Rectangle {
         .width(Parent)
         .height(80.)
         .radius(5.)
-        .fill(fill)
+        .fill(BLACK)
         .padding(12.)
-        .border(1., WHITE)
+        .border(1., border)
         .on_click(move |_| Notifications::click(id))
         .align_child(Align::Start, Align::Center)
         .child(Column::new(children![
