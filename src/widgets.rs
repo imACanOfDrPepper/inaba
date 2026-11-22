@@ -14,7 +14,7 @@ use amane::{
 use crate::palette::{BLACK, BLACKER, WHITE};
 
 pub fn media() -> LayerWindow {
-    let margin = 40;
+    let margin = 20;
 
     let media = Media::read();
 
@@ -79,7 +79,7 @@ pub fn media() -> LayerWindow {
 }
 
 pub fn system() -> LayerWindow {
-    let margin = 40;
+    let margin = 20;
 
     let cpu = Cpu::read();
     let mem = Memory::read();
