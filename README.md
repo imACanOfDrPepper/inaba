@@ -4,7 +4,9 @@ Inaba is a shell built in Amane.
 
 # Demo
 
-https://github.com/user-attachments/assets/6f5bb9ee-aaa7-4d0e-a467-795db6e4e6da
+https://github.com/user-attachments/assets/6f5c4d70-1954-42de-815e-a1e37ffa14b7
+
+(the Hyprland message is an Amane bug I believe)
 
 # Included
 
@@ -12,7 +14,7 @@ https://github.com/user-attachments/assets/6f5bb9ee-aaa7-4d0e-a467-795db6e4e6da
 - App launcher
 - Notification daemon
 - Desktop widgets
-- Lock screen
+- Lock screen with power controls
 - Haha funny Activate Linux widget
 
 This is my first shell, so it's not amazing, but hey I made it :)
