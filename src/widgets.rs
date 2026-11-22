@@ -44,7 +44,6 @@ pub fn media() -> LayerWindow {
         .layer(Bottom)
         .anchor_vertical(Top)
         .anchor_horizontal(Left)
-        .namespace("amane-desktop-widget")
         .namespace("inaba-desktop-widget")
         .margin(Margin {
             top: margin,
@@ -91,7 +90,6 @@ pub fn system() -> LayerWindow {
         .layer(Bottom)
         .anchor_vertical(Top)
         .anchor_horizontal(Right)
-        .namespace("amane-desktop-widget")
         .namespace("inaba-desktop-widget")
         .margin(Margin {
             top: margin,
