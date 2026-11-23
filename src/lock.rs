@@ -49,7 +49,7 @@ pub fn lock_screen(_: &Monitor) -> LayerWindow {
                     Rectangle::new().width(500.).height(40.).child(
                         Row::new(children![
                             button("[ SUSPEND ]", "systemctl suspend", WHITE),
-                            button("[ REBOOT ]", "reboot", RED),
+                            button("[ HIBERNATE ]", "systemctl hibernate", WHITE),
                             button("[ SHUTDOWN ]", "poweroff", RED)
                         ])
                         .gap(5.)
