@@ -39,6 +39,12 @@ Or start it with your compositor (Hyprland here):
 hl.on("hyprland.start", function() hl.exec_cmd("amane run") end)
 ```
 
+It also uses a namespace called `inaba-desktop-widget`, so you can apply blur to widgets:
+
+```
+hl.layer_rule({ match = { namespace = "inaba-desktop-widget" }, blur = true })
+```
+
 # Dependencies
 
 - amane
